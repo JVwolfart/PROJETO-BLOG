@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load static%}
+{% block 'titulo' %}
+Novo artigo
+{% endblock %}
+{% block 'conteudo' %}
+{% include 'parciais/_autenticado.html'%}
+<h1 style="padding-top: 20px;" class="text-center">Novo artigo</h1>
+{% include 'parciais/_messages.html'%}
+
+<form action="{% url 'artigo'%}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <table class="table">
+        {{form}}
+    <tr class="text-center">
+        <td class="text-center" colspan="2">
+            <button class="btn btn-primary" type="submit">Enviar postagem</button>
+        </td>
+    </tr>
+
+    </table>
+    
+</form>
+
+{% endblock %}

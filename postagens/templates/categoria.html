@@ -3,8 +3,8 @@
 {% block 'titulo' %}
 {{categoria.categoria}}
 {% endblock %}
-
 {% block 'conteudo' %}
+{% include 'parciais/_autenticado.html'%}
 <div class="row">
     <h5 class="titulo">Categoria: {{categoria.categoria}}</h5>
     

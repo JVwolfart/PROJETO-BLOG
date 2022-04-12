@@ -3,10 +3,10 @@ from django.shortcuts import render, get_object_or_404
 from .models import Categoria, Postagem
 from django.core.paginator import Paginator
 from django.db.models import Q, Count
+from django.contrib import messages
 
 # Create your views here.
 def index(request):
-    categorias = Categoria.objects.all().order_by('categoria')
     postagens = Postagem.objects.all().order_by('-id')
     postagem1 = Categoria.objects.order_by('categoria').annotate(n=Count('postagem'))
     
@@ -17,7 +17,6 @@ def index(request):
 
 def busca(request):
     termo = request.GET.get('termo')
-    categorias = Categoria.objects.all().order_by('categoria')
     postagens = Postagem.objects.filter(
         Q(titulo__icontains=termo) | Q(conteudo__icontains=termo)
     ).order_by('-id')
@@ -28,7 +27,6 @@ def busca(request):
     return render(request, 'pesquisa.html', {'postagens':postagens,  'postagem1':postagem1, 'termo':termo})
 
 def busca_categoria(request, id):
-    categorias = Categoria.objects.all().order_by('categoria')
     postagens = Postagem.objects.all().order_by('-id').filter(
         categoria = id
     )

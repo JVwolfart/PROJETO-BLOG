@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static%}
+{% block 'titulo' %}
+Página do Colaborador
+{% endblock %}
+{% block 'conteudo' %}
+{% include 'parciais/_autenticado.html'%}
+<h1 style="padding-top: 20px;" class="text-center">Página do colaborador</h1>
+{% include 'parciais/_messages.html'%}
+
+<div class="row py-3">
+    <div class="col-3">
+        <div>
+            <a href="{% url 'artigo'%}"><img src="{% static 'img/icone_postagem.png'%}" style="width: 100%;"></a>
+        </div>
+
+        <div>
+            <a href="{% url 'artigo'%}">Criar uma nova postagem</a>
+        </div>
+    </div>
+
+    <div class="col-3">
+
+    </div>
+
+    <div class="col-3">
+
+    </div>
+
+    <div class="col-3">
+
+    </div>
+    
+</div>
+<br><br><br>
+{% endblock %}

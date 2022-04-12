@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static%}
+{% block 'titulo' %}
+{{categoria.categoria}}
+{% endblock %}
+
+{% block 'conteudo' %}
+<div class="row">
+    <h5 class="titulo">Categoria: {{categoria.categoria}}</h5>
+    
+    
+    <div class="conteudo col-lg-9">
+        {% for p in postagens %}
+        <div class="materia">
+            <a href="{% url 'postagem' p.id%}"><h2>{{p.titulo}}</h2></a>
+            <hr>
+            <div class="row">
+                <div class="col-lg-4 col-sm-12">
+                    <a href="{% url 'postagem' p.id%}"><img src="{{p.foto.url}}" alt="{{p.titulo}}"></a>
+                </div>
+                <div class="col-lg-8">
+                    <p>{{p.resumo}}</p>
+                    <p>Postado em: {{p.data_postagem}}</p>
+                    <p>Categoria: {{p.categoria}}</p>
+                    <button><a href="{% url 'postagem' p.id%}">Ler...</a></button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        <div class="text-center">
+            <nav aria-label="Page navigation example mb-5">
+                <ul class="pagination justify-content-center">
+                <li class="page-item">
+                    {%if postagens.has_previous %}
+                    <a class="page-link" href="?p={{postagens.previous_page_number}} &termo={{request.GET.termo}}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    {% endif %}
+                </li>
+                {%for pagina in postagens.paginator.page_range%}
+                    {%if postagens.number == pagina%}
+                        <li class="page-item active"><a class="page-link" href="?p={{pagina}} &termo={{request.GET.termo}}">{{pagina}}</a></li>
+                    {%else %}
+                        <li class="page-item"><a class="page-link" href="?p={{pagina}} &termo={{request.GET.termo}}">{{pagina}}</a></li>
+                    {%endif%}
+                {% endfor %}
+    
+                <li class="page-item">
+                    {%if postagens.has_next %}
+                    <a class="page-link" href="?p={{postagens.next_page_number}} &termo={{request.GET.termo}}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                    </a>
+                    {% endif %}
+                </li>
+                </ul>
+            </nav>
+        </div>
+
+    </div>
+
+
+
+    
+    <div class="labels col-lg-3 col-11">
+        <h3>CATEGORIAS</h3>
+        <hr>
+        <div class="itens">
+            {% for p in postagem1%}
+            <a href="{% url 'busca_categoria' p.id %}">{{p.categoria}} ({{p.n}})</a>
+            {% endfor %}
+        </div>
+    </div>
+
+        
+</div>
+{% endblock %}

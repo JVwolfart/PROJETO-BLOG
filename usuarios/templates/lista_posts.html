@@ -15,6 +15,7 @@ Lista de postagens
             <th>Id</th>
             <th>Título</th>
             <th>Categoria</th>
+            <th>Postado</th>
         </tr>
     </thead>
 
@@ -23,6 +24,11 @@ Lista de postagens
         <td><a href="{% url 'alterar' p.id%}">{{p.id}}</a></td>
         <td><a href="{% url 'alterar' p.id%}">{{p.titulo}}</a></td>
         <td>{{p.categoria}}</td>
+        {%if p.postado %}
+        <td>Sim</td>
+        {%else%}
+        <td style="color: red;"><strong>Não</strong></td>
+        {%endif%}
     </tr>
     {% endfor %}
 </table>

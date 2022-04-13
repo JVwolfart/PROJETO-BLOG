@@ -7,8 +7,8 @@ from django.contrib import messages
 
 # Create your views here.
 def index(request):
-    postagens = Postagem.objects.all().order_by('-id')
-    postagem1 = Categoria.objects.order_by('categoria').annotate(n=Count('postagem'))
+    postagens = Postagem.objects.all().order_by('-id').filter(postado=True)
+    postagem1 = Categoria.objects.order_by('categoria').filter(postagem__postado=True).annotate( n=Count('postagem'))
     
     paginator = Paginator(postagens, 4)
     page = request.GET.get('p')
@@ -18,9 +18,9 @@ def index(request):
 def busca(request):
     termo = request.GET.get('termo')
     postagens = Postagem.objects.filter(
-        Q(titulo__icontains=termo) | Q(conteudo__icontains=termo)
+        Q(titulo__icontains=termo) | Q(conteudo__icontains=termo), postado = True
     ).order_by('-id')
-    postagem1 = Categoria.objects.order_by('categoria').annotate(n=Count('postagem'))
+    postagem1 = Categoria.objects.order_by('categoria').filter(postagem__postado=True).annotate( n=Count('postagem'))
     paginator = Paginator(postagens, 4)
     page = request.GET.get('p')
     postagens = paginator.get_page(page)
@@ -28,10 +28,10 @@ def busca(request):
 
 def busca_categoria(request, id):
     postagens = Postagem.objects.all().order_by('-id').filter(
-        categoria = id
+        categoria = id, postado = True
     )
     categoria = get_object_or_404(Categoria, id=id)
-    postagem1 = Categoria.objects.order_by('categoria').annotate(n=Count('postagem'))
+    postagem1 = Categoria.objects.order_by('categoria').filter(postagem__postado=True).annotate( n=Count('postagem'))
     paginator = Paginator(postagens, 4)
     page = request.GET.get('p')
     postagens = paginator.get_page(page)

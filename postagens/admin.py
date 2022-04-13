@@ -9,11 +9,12 @@ class AdmCategoria(admin.ModelAdmin):
     search_field = ['categoria']
 
 class AdmPostagem(admin.ModelAdmin):
-    list_display = ('titulo', 'data_postagem', 'categoria', )
+    list_display = ('titulo', 'data_postagem', 'categoria', 'postado')
     list_display_links = ('titulo',)
     list_per_page = 10
     search_field = ['titulo', 'data_postagem']
     list_filter = ['categoria']
+    list_editable = ('postado', )
 
 admin.site.register(Categoria, AdmCategoria)
 admin.site.register(Postagem, AdmPostagem)

@@ -74,7 +74,7 @@ def artigo(request):
     
     else:
         form.save()
-        messages.add_message(request, messages.SUCCESS, 'Post publicado com sucesso')
+        messages.add_message(request, messages.SUCCESS, 'Post enviado com sucesso, será publicado logo após a revisão')
         return redirect('colaborador')
 
 @login_required(login_url='/usuarios/login')

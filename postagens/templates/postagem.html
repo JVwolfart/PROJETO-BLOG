@@ -10,8 +10,9 @@
     <div class="foto text-center">
         <p>Postado em {{postagem.data_postagem}}</p>
         <p>Categoria: {{postagem.categoria}}</p>
+        {% if postagem.foto %}
         <img src="{{postagem.foto.url}}">
-        
+        {%endif%}
     </div>
     
 <div class="row">

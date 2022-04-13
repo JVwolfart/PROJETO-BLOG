@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static%}
+{% block 'titulo' %}
+Alterar artigo
+{% endblock %}
+{% block 'conteudo' %}
+{% include 'parciais/_autenticado.html'%}
+<h1 style="padding-top: 20px;" class="text-center">Alteração de artigo</h1>
+{% include 'parciais/_messages.html'%}
+
+<form action="#" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <table class="table">
+        {{form}}
+    <tr class="text-center">
+        <td class="text-center" colspan="2">
+            <button class="btn btn-primary" type="submit">Alterar postagem</button>
+        </td>
+    </tr>
+
+    </table>
+    
+</form>
+
+
+{% endblock %}

@@ -8,4 +8,7 @@ urlpatterns = [
     path('colaborador/', views.index_colaborador, name='colaborador'),
     path('logout/', views.logout, name='logout'),
     path('colaborador/artigo/', views.artigo, name='artigo'),
+    path('colaborador/lista/', views.listar_posts, name='lista'),
+    path('colaborador/alterar/<int:id>', views.alterar_postagem, name='alterar'),
+    
 ]

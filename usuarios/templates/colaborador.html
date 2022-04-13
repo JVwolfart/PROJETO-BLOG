@@ -9,26 +9,24 @@ Página do Colaborador
 {% include 'parciais/_messages.html'%}
 
 <div class="row py-3">
-    <div class="col-3">
+    <div class="col-5">
         <div>
             <a href="{% url 'artigo'%}"><img src="{% static 'img/icone_postagem.png'%}" style="width: 100%;"></a>
         </div>
 
-        <div>
+        <div class="text-center">
             <a href="{% url 'artigo'%}">Criar uma nova postagem</a>
         </div>
     </div>
+    <div class="col"></div>
+    <div class="col-5">
+        <div>
+            <a href="{% url 'lista'%}"><img src="{% static 'img/icone_alterar.png'%}" style="width: 100%;"></a>
+        </div>
 
-    <div class="col-3">
-
-    </div>
-
-    <div class="col-3">
-
-    </div>
-
-    <div class="col-3">
-
+        <div class="text-center">
+            <a href="{% url 'lista'%}">Alterar postagem</a>
+        </div>
     </div>
     
 </div>

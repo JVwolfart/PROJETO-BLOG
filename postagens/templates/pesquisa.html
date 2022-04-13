@@ -16,9 +16,15 @@ Pesquisa
             <a href="{% url 'postagem' p.id%}"><h2>{{p.titulo}}</h2></a>
             <hr>
             <div class="row">
+                {% if p.foto%}
                 <div class="col-lg-4 col-sm-12">
                     <a href="{% url 'postagem' p.id%}"><img src="{{p.foto.url}}" alt="{{p.titulo}}"></a>
                 </div>
+                {%else%}
+                <div class="col-lg-4 col-sm-12">
+                    <a href="{% url 'postagem' p.id%}"><img src="{% static 'img/sem_foto.jpeg'%}" alt="{{p.titulo}}"></a>
+                </div>
+                {%endif%}
                 <div class="col-lg-8">
                     <p>{{p.resumo}}</p>
                     <p>Postado em: {{p.data_postagem}}</p>

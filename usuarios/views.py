@@ -2,6 +2,9 @@ from django.shortcuts import render, redirect
 from django.contrib import messages, auth
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from postagens.models import Postagem
+from django.core.paginator import Paginator
+
 
 from .models import FormPostagem
 # Create your views here.
@@ -73,8 +76,32 @@ def artigo(request):
         form.save()
         messages.add_message(request, messages.SUCCESS, 'Post publicado com sucesso')
         return redirect('colaborador')
+
+@login_required(login_url='/usuarios/login')
+def listar_posts(request):
+    posts = Postagem.objects.all().order_by('-id')
+    paginator = Paginator(posts, 10)
+    page = request.GET.get('p')
+    posts = paginator.get_page(page)
+    return render(request, 'lista_posts.html', {'posts': posts})
+
+@login_required(login_url='/usuarios/login')
+def alterar_postagem(request, id):
     
+    postagem = Postagem.objects.get(id=id)
+    form = FormPostagem(request.POST or None , request.FILES , instance=postagem)
+
+    if request.method != 'POST':
+        form = FormPostagem(request.POST or None, instance=postagem)
+        return render(request, 'alterar.html', {'postagem':postagem, 'form':form})
 
 
-
-
+    if not form.is_valid():
+        form = FormPostagem(request.POST or None, instance=postagem)
+        messages.add_message(request, messages.ERROR, 'Erro no formulário')
+        return render(request, 'alterar.html', {'postagem':postagem, 'form':form})
+    
+    else:
+        form.save()
+        messages.add_message(request, messages.SUCCESS, 'Post alterado com sucesso')
+        return redirect('lista')

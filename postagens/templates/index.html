@@ -12,6 +12,8 @@ Home
     
     
     <div class="conteudo col-lg-9">
+        
+
         {% for p in postagens %}
         <div class="materia">
             <a href="{% url 'postagem' p.id%}"><h2>{{p.titulo}}</h2></a>
@@ -30,7 +32,8 @@ Home
                 <div class="col-lg-8">
                     <p>{{p.resumo}}</p>
                     <p>Postado em: {{p.data_postagem}}</p>
-                    <p>Categoria: {{p.categoria}}</p>
+                    <p>Categoria: {{p.categoria}}</p> <strong>Autor: {{p.autor}}</strong>
+                    
                     <button><a href="{% url 'postagem' p.id%}">Ler...</a></button>
                 </div>
             </div>

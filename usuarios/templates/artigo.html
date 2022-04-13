@@ -10,8 +10,9 @@ Novo artigo
 
 <form action="{% url 'artigo'%}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
+    
     <table class="table">
-        {{form}}
+        {{form}}    
     <tr class="text-center">
         <td class="text-center" colspan="2">
             <button class="btn btn-primary" type="submit">Enviar postagem</button>

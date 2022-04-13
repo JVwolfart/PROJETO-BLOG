@@ -8,7 +8,11 @@ Página do Colaborador
 <h1 style="padding-top: 20px;" class="text-center">Página do colaborador</h1>
 {% include 'parciais/_messages.html'%}
 
+{%if  request.user.groups.all.0.name  != None %}
+
+
 <div class="row py-3">
+    
     <div class="col-5">
         <div>
             <a href="{% url 'artigo'%}"><img src="{% static 'img/icone_postagem.png'%}" style="width: 100%;"></a>
@@ -21,14 +25,21 @@ Página do Colaborador
     <div class="col"></div>
     <div class="col-5">
         <div>
-            <a href="{% url 'lista'%}"><img src="{% static 'img/icone_alterar.png'%}" style="width: 100%;"></a>
+            <a href="{% url 'lista' user.id%}"><img src="{% static 'img/icone_alterar.png'%}" style="width: 100%;"></a>
         </div>
 
         <div class="text-center">
-            <a href="{% url 'lista'%}">Alterar postagem</a>
+            <a href="{% url 'lista' user.id%}">Alterar postagem</a>
+            
         </div>
     </div>
     
 </div>
 <br><br><br>
+
+{%else%}
+<p class="alert alert-warning">ATENÇÃO Você precisa solicitar a administração a inclusão em algum grupo autorizado a efetuar postagens</p>
+{%endif%}
+
+
 {% endblock %}

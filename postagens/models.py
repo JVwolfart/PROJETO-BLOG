@@ -16,6 +16,7 @@ class Postagem(models.Model):
     categoria = models.ForeignKey(Categoria, on_delete=models.DO_NOTHING)
     foto = models.ImageField(blank=True, upload_to='fotos')
     postado = models.BooleanField(default=False)
+    autor = models.ForeignKey(User, on_delete=models.DO_NOTHING, blank=True, null=True)
 
     def __str__(self):
         return self.titulo

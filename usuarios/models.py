@@ -6,4 +6,4 @@ from django import forms
 class FormPostagem(forms.ModelForm):
     class Meta:
         model = Postagem
-        exclude = ('data_postagem', 'postado',)
+        exclude = ('data_postagem', 'postado')

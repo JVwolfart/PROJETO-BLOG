@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages, auth
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from postagens.models import Postagem
+from postagens.models import Categoria, Postagem
 from django.core.paginator import Paginator
 
 
@@ -41,6 +41,18 @@ def cadastro(request):
         messages.add_message(request, messages.ERROR, 'ERRO! senhas não conferem')
         return render(request, 'cadastro.html')
 
+    if len(senha) < 6:
+        messages.add_message(request, messages.ERROR, 'ERRO! senha deve ter mais de 6 caracteres')
+        return render(request, 'cadastro.html')
+
+    if len(senha) > 12:
+        messages.add_message(request, messages.ERROR, 'ERRO! senha deve ter menos de 12 caracteres')
+        return render(request, 'cadastro.html')
+
+    if not senha.isalnum():
+        messages.add_message(request, messages.ERROR, 'ERRO! senha não pode ter caracteres especiais, exemplo: (#@%$/*+-!&[}{]:;.), apenas alfanuméricos')
+        return render(request, 'cadastro.html')
+
     if User.objects.filter(username=usuario).exists():
         messages.add_message(request, messages.ERROR, f'ERRO! Usuário {usuario} já existe')
         return render(request, 'cadastro.html')
@@ -77,9 +89,35 @@ def artigo(request):
         messages.add_message(request, messages.SUCCESS, 'Post enviado com sucesso, será publicado logo após a revisão')
         return redirect('colaborador')
 
+
 @login_required(login_url='/usuarios/login')
-def listar_posts(request):
-    posts = Postagem.objects.all().order_by('-id')
+def artigo2(request):
+    categorias = Categoria.objects.all()
+    if request.method != 'POST':
+        return render(request, 'artigo2.html', {'categorias':categorias})
+    titulo = request.POST.get('titulo')
+    resumo = request.POST.get('resumo')
+    conteudo = request.POST.get('conteudo')
+    categoria = request.POST.get('categoria')
+    categoria = int(categoria)
+    foto = request.FILES.get('foto')
+    autor = request.POST.get('autor')
+    print(categoria)
+    postagem = Postagem.objects.create(titulo=titulo, resumo=resumo, conteudo=conteudo, categoria=categoria, foto=foto, autor=autor)
+    if postagem.is_valid():
+        postagem.save()
+        messages.add_message(request, messages.SUCCESS, 'Postagem enviada com sucesso.')
+        redirect('home')
+    else:
+        messages.add_message(request, messages.ERROR, 'Erro ao enviar o formulario')
+        return render(request, 'artigo2.html', {'categorias':categorias})
+    
+
+@login_required(login_url='/usuarios/login')
+def listar_posts(request, id_autor):
+    posts = Postagem.objects.all().order_by('-id').filter(
+        autor=id_autor
+    )
     paginator = Paginator(posts, 10)
     page = request.GET.get('p')
     posts = paginator.get_page(page)

@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% load static%}
+{% block 'titulo' %}
+Novo artigo
+{% endblock %}
+{% block 'conteudo' %}
+{% include 'parciais/_autenticado.html'%}
+<h1 style="padding-top: 20px;" class="text-center">Novo artigo</h1>
+{% include 'parciais/_messages.html'%}
+
+<form action="{% url 'artigo'%}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+    <table class="table">
+        <tr>
+    <th><label for="id_titulo">Titulo:</label></th>
+    <td>
+      
+      <input type="text" name="titulo" maxlength="100" required id="id_titulo">
+      
+      
+    </td>
+  </tr>
+
+  <tr>
+    <th><label for="id_resumo">Resumo:</label></th>
+    <td>
+      
+      <textarea name="resumo" cols="40" rows="10" required id="id_resumo">
+</textarea>
+      
+      
+    </td>
+  </tr>
+
+  <tr>
+    <th><label for="id_conteudo">Conteudo:</label></th>
+    <td>
+      
+      <textarea name="conteudo" cols="40" rows="10" required id="id_conteudo">
+</textarea>
+      
+      
+    </td>
+  </tr>
+
+  <tr>
+    <th><label for="id_categoria">Categoria:</label></th>
+    <td>
+      
+      <select name="categoria" required id="id_categoria">
+  <option value="" selected>---------</option>
+{% for categoria in categorias%}
+<option value="{{categoria.id}}">{{categoria.categoria}}</option>
+{%endfor%}
+  
+
+</select>
+      
+      
+    </td>
+  </tr>
+
+  <tr>
+    <th><label for="id_foto">Foto:</label></th>
+    <td>
+      
+      <input type="file" name="foto" accept="image/*" id="id_foto">
+      
+      
+    </td>
+  </tr>
+
+  <tr>
+    <th><label for="id_autor">Autor:</label></th>
+    <td>
+      
+    <input type="hidden" name="autor" id="id_autor" value="{{user.id}}">    
+      
+    </td>
+  </tr>    
+    <tr class="text-center">
+        <td class="text-center" colspan="2">
+            <button class="btn btn-primary" type="submit">Enviar postagem</button>
+        </td>
+    </tr>
+
+    </table>
+    
+</form>
+
+{% endblock %}

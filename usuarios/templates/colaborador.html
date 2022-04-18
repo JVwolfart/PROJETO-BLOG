@@ -24,6 +24,7 @@ Página do Colaborador
     </div>
     <div class="col"></div>
     <div class="col-5">
+        {%if user.groups.all.0.name != 'Diretoria'%}
         <div>
             <a href="{% url 'lista' user.id%}"><img src="{% static 'img/icone_alterar.png'%}" style="width: 100%;"></a>
         </div>
@@ -32,6 +33,17 @@ Página do Colaborador
             <a href="{% url 'lista' user.id%}">Alterar postagem</a>
             
         </div>
+        {%else%}
+
+        <div>
+            <a href="{% url 'lista_all'%}"><img src="{% static 'img/icone_alterar.png'%}" style="width: 100%;"></a>
+        </div>
+
+        <div class="text-center">
+            <a href="{% url 'lista_all'%}">Alterar postagem</a>
+            
+        </div>
+        {%endif%}
     </div>
     
 </div>

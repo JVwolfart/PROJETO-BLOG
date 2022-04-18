@@ -16,16 +16,16 @@ Home
 
         {% for p in postagens %}
         <div class="materia">
-            <a href="{% url 'postagem' p.id%}"><h2>{{p.titulo}}</h2></a>
+            <a href="{% url 'postagem' p.id%}" target="blank"><h2>{{p.titulo}}</h2></a>
             <hr>
             <div class="row">
                 {% if p.foto%}
                 <div class="col-lg-4 col-sm-12">
-                    <a href="{% url 'postagem' p.id%}"><img src="{{p.foto.url}}" alt="{{p.titulo}}"></a>
+                    <a href="{% url 'postagem' p.id%}" target="blank"><img src="{{p.foto.url}}" alt="{{p.titulo}}"></a>
                 </div>
                 {%else%}
                 <div class="col-lg-4 col-sm-12">
-                    <a href="{% url 'postagem' p.id%}"><img src="{% static 'img/sem_foto.jpeg'%}" alt="{{p.titulo}}"></a>
+                    <a href="{% url 'postagem' p.id%}" target="blank"><img src="{% static 'img/sem_foto1.jpeg'%}" alt="{{p.titulo}}"></a>
                 </div>
                 {%endif%}
 
@@ -34,7 +34,7 @@ Home
                     <p>Postado em: {{p.data_postagem}}</p>
                     <p>Categoria: {{p.categoria}}</p> <strong>Autor: {{p.autor}}</strong>
                     
-                    <button><a href="{% url 'postagem' p.id%}">Ler...</a></button>
+                    <button><a href="{% url 'postagem' p.id%}" target="blank">Ler...</a></button>
                 </div>
             </div>
         </div>

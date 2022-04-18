@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from postagens.models import Categoria, Postagem
 from django.core.paginator import Paginator
+from django.utils import timezone
+
 
 
 from .models import FormPostagem
@@ -74,12 +76,17 @@ def logout(request):
     auth.logout(request)
     return redirect('home')
 
-@login_required(login_url='/usuarios/login')
+'''@login_required(login_url='/usuarios/login')
 def artigo(request):
     if request.method != 'POST':
         form = FormPostagem()
         return render(request, 'artigo.html', {'form':form})
     form = FormPostagem(request.POST, request.FILES)
+
+
+    
+
+
     if not form.is_valid():
         messages.add_message(request, messages.ERROR, 'Erro no formulário')
         return render(request, 'artigo.html', {'form':form})
@@ -87,37 +94,40 @@ def artigo(request):
     else:
         form.save()
         messages.add_message(request, messages.SUCCESS, 'Post enviado com sucesso, será publicado logo após a revisão')
-        return redirect('colaborador')
+        return redirect('colaborador')'''
 
 
 @login_required(login_url='/usuarios/login')
-def artigo2(request):
+def artigo(request):
     categorias = Categoria.objects.all()
     if request.method != 'POST':
         return render(request, 'artigo2.html', {'categorias':categorias})
-    titulo = request.POST.get('titulo')
-    resumo = request.POST.get('resumo')
-    conteudo = request.POST.get('conteudo')
-    categoria = request.POST.get('categoria')
-    categoria = int(categoria)
+    titulo = request.POST.get('titulo').strip().title()
+    resumo = request.POST.get('resumo').strip()
+    conteudo = request.POST.get('conteudo').strip()
+    categ = Categoria.objects.get(id=request.POST.get('categoria'))  
     foto = request.FILES.get('foto')
-    autor = request.POST.get('autor')
-    print(categoria)
-    postagem = Postagem.objects.create(titulo=titulo, resumo=resumo, conteudo=conteudo, categoria=categoria, foto=foto, autor=autor)
-    if postagem.is_valid():
-        postagem.save()
-        messages.add_message(request, messages.SUCCESS, 'Postagem enviada com sucesso.')
-        redirect('home')
-    else:
-        messages.add_message(request, messages.ERROR, 'Erro ao enviar o formulario')
-        return render(request, 'artigo2.html', {'categorias':categorias})
+    autor = request.user
+    
+    postagem = Postagem.objects.create(titulo=titulo, resumo=resumo, conteudo=conteudo, categoria=categ, foto=foto, autor=autor)
+    postagem.save()
+    messages.add_message(request, messages.SUCCESS, 'Postagem enviada com sucesso, será publicado logo após a revisão.')
+    return redirect('colaborador')
     
 
 @login_required(login_url='/usuarios/login')
 def listar_posts(request, id_autor):
-    posts = Postagem.objects.all().order_by('-id').filter(
+    posts = Postagem.objects.all().order_by('-data_postagem').filter(
         autor=id_autor
     )
+    paginator = Paginator(posts, 10)
+    page = request.GET.get('p')
+    posts = paginator.get_page(page)
+    return render(request, 'lista_posts.html', {'posts': posts})
+
+@login_required(login_url='/usuarios/login')
+def listar_all_posts(request):
+    posts = Postagem.objects.all().order_by('-data_postagem')
     paginator = Paginator(posts, 10)
     page = request.GET.get('p')
     posts = paginator.get_page(page)
@@ -127,6 +137,10 @@ def listar_posts(request, id_autor):
 def alterar_postagem(request, id):
     
     postagem = Postagem.objects.get(id=id)
+
+    if postagem.postado:
+        postagem.postado = False
+
     form = FormPostagem(request.POST or None , request.FILES , instance=postagem)
 
     if request.method != 'POST':
@@ -141,5 +155,27 @@ def alterar_postagem(request, id):
     
     else:
         form.save()
-        messages.add_message(request, messages.SUCCESS, 'Post alterado com sucesso')
-        return redirect('lista')
+        messages.add_message(request, messages.SUCCESS, 'Post alterado com sucesso, será publicada logo após a revisão')
+        return redirect('colaborador')
+
+
+@login_required(login_url='/usuarios/login')
+def autorizar_postagem(request, id):
+    
+    postagem = Postagem.objects.get(id=id)
+    
+    postagem.postado = True
+    postagem.data_postagem = timezone.now()
+
+    postagem.save()
+    return redirect('lista_all')
+
+@login_required(login_url='/usuarios/login')
+def desligar_postagem(request, id):
+    
+    postagem = Postagem.objects.get(id=id)
+    
+    postagem.postado = False
+
+    postagem.save()
+    return redirect('lista_all')

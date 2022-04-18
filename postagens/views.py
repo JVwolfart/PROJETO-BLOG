@@ -7,7 +7,7 @@ from django.contrib import messages
 
 # Create your views here.
 def index(request):
-    postagens = Postagem.objects.all().order_by('-id').filter(postado=True)
+    postagens = Postagem.objects.all().order_by('-data_postagem').filter(postado=True)
     postagem1 = Categoria.objects.order_by('categoria').filter(postagem__postado=True).annotate( n=Count('postagem'))
     
     paginator = Paginator(postagens, 4)
@@ -19,7 +19,7 @@ def busca(request):
     termo = request.GET.get('termo')
     postagens = Postagem.objects.filter(
         Q(titulo__icontains=termo) | Q(conteudo__icontains=termo), postado = True
-    ).order_by('-id')
+    ).order_by('-data_postagem')
     postagem1 = Categoria.objects.order_by('categoria').filter(postagem__postado=True).annotate( n=Count('postagem'))
     paginator = Paginator(postagens, 4)
     page = request.GET.get('p')

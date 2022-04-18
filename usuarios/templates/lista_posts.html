@@ -8,7 +8,7 @@ Lista de postagens
 <h1 style="padding-top: 20px;" class="text-center">Selecione uma postagem para fazer a alteração</h1>
 {% include 'parciais/_messages.html'%}
 
-
+{%if user.groups.all.0.name != 'Diretoria'%}
 <table class="table">
     <thead>
         <tr>
@@ -29,9 +29,44 @@ Lista de postagens
         {%else%}
         <td style="color: red;"><strong>Não</strong></td>
         {%endif%}
+
     </tr>
     {% endfor %}
 </table>
+
+{%else%}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Título</th>
+            <th>Autor</th>
+            <th>Categoria</th>
+            <th>Postado</th>
+            <th>Autorizar/desligar</th>
+        </tr>
+    </thead>
+
+    {% for p in posts%}
+    <tr>
+        <td><a href="{% url 'alterar' p.id%}">{{p.id}}</a></td>
+        <td><a href="{% url 'alterar' p.id%}">{{p.titulo}}</a></td>
+        <td>{{p.autor}}</td>
+        <td>{{p.categoria}}</td>
+        {%if p.postado %}
+        <td class="text-success"><strong>Sim</strong></td>
+        <td><a href="{% url 'desligar' p.id%}">Desligar postagem</a></td>
+        {%else%}
+        <td style="color: red;"><strong>Não</strong></td>
+        <td><a href="{% url 'autorizar' p.id%}">Autorizar postagem</a></td>
+        {%endif%}
+
+    </tr>
+    {% endfor %}
+</table>
+
+{%endif%}
 
 <div class="text-center">
     <nav aria-label="Page navigation example mb-5">

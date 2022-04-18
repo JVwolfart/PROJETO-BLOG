@@ -1,10 +1,12 @@
-{% extends 'base.html' %}
+{% extends 'base_detalhes.html' %}
 {% load static%}
 {% block 'titulo' %}
 {{postagem.titulo}}
 {% endblock %}
 {% block 'conteudo' %}
-{% include 'parciais/_autenticado.html'%}
+
+
+
 <div class="row">
     <h1 class="titulo text-center my-5">{{postagem.titulo}}</h1>
     <div class="foto text-center">
